@@ -1,0 +1,240 @@
+﻿@model IEnumerable<ProyectoMLHOMP.Models.Apartment>
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="container mt-4">
+    <!-- Hero Section con imagen de fondo -->
+    <div class="hero-section text-center text-white mb-5">
+        <div class="hero-content">
+            <h1 class="display-4 fw-bold">Encuentra tu hogar ideal</h1>
+            <p class="lead">Descubre los mejores apartamentos disponibles para tu estancia.</p>
+        </div>
+    </div>
+
+    <!-- Sección de Apartamentos -->
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var apartment in Model.Where(a => a.IsAvailable))
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Imagen del apartamento -->
+                        <div class="card-img-wrapper">
+                            <img src="@apartment.ImageUrl" 
+                                 class="card-img-top apartment-image" 
+                                 alt="@apartment.Title"
+                                 onerror="this.src='/images/apartments/default-apartment.jpg';">
+                            <div class="card-img-overlay">
+                                <span class="badge bg-primary price-badge">
+                                    $@apartment.PricePerNight<small>/noche</small>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">@apartment.Title</h5>
+                            <p class="card-text text-muted location">
+                                <i class="bi bi-geo-alt-fill"></i> @apartment.City, @apartment.Country
+                            </p>
+                            <p class="card-text description">
+                                @(apartment.Description?.Length > 100
+                                    ? apartment.Description.Substring(0, 97) + "..."
+                                    : apartment.Description)
+                            </p>
+
+                            <div class="apartment-features">
+                                <div class="feature">
+                                    <i class="bi bi-door-closed"></i>
+                                    <span>@apartment.Bedrooms Hab.</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="bi bi-droplet"></i>
+                                    <span>@apartment.Bathrooms Baños</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="bi bi-people"></i>
+                                    <span>@apartment.MaxOccupancy Huéspedes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-white border-top-0">
+                            <a asp-controller="Apartments" 
+                               asp-action="Details" 
+                               asp-route-id="@apartment.ApartmentId"
+                               class="btn btn-outline-primary w-100">
+                                <i class="bi bi-eye"></i> Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-house-x display-1 text-muted mb-3"></i>
+                <h3>No hay apartamentos disponibles en este momento</h3>
+                <p class="text-muted">¡Vuelve a consultar más tarde!</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('/images/hero-background.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-content {
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        /* Card Styles */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .apartment-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .apartment-image {
+            transform: scale(1.05);
+        }
+
+        .price-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            background-color: rgba(13, 110, 253, 0.9) !important;
+        }
+
+        .price-badge small {
+            font-size: 0.8rem;
+            margin-left: 2px;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .location {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: #666;
+            font-size: 0.9rem;
+            height: 3em;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .apartment-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .feature {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .feature i {
+            color: #0d6efd;
+        }
+
+        .btn-outline-primary {
+            border-width: 2px;
+        }
+
+        .btn-outline-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+        }
+
+        /* Responsive Adjustments */
+        @@media (max-width: 768px) {
+            .hero-section {
+                height: 300px;
+            }
+
+            .card-img-wrapper {
+                height: 180px;
+            }
+
+            .apartment-features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Manejar errores de carga de imagen
+            $('.apartment-image').on('error', function() {
+                $(this).attr('src', '/images/apartments/default-apartment.jpg');
+            });
+
+            // Tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Lazy loading de imágenes
+            if ('loading' in HTMLImageElement.prototype) {
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                images.forEach(img => {
+                    img.setAttribute('loading', 'lazy');
+                });
+            }
+        });
+    </script>
+}

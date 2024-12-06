@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">Iniciar Sesión</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Login" asp-controller="Users" method="post">
+                        @if (ViewData["ReturnUrl"] != null)
+                        {
+                                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        }
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                                <input type="text" class="form-control" id="username" name="username" required 
+                                       placeholder="Ingrese su nombre de usuario" />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" required 
+                                       placeholder="Ingrese su contraseña" />
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="text-center">
+                        <p class="mb-0">¿No tienes una cuenta? <a asp-action="Register" asp-controller="Users">Regístrate aquí</a></p>
+                        <p class="mt-2 mb-0">
+                            <a asp-action="ForgotPassword" asp-controller="Users" class="text-decoration-none">
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            .input-group-text {
+                background-color: #f8f9fa;
+                border-right: none;
+            }
+
+            .input-group .form-control {
+                border-left: none;
+            }
+
+            .input-group .form-control:focus {
+                border-color: #ced4da;
+                box-shadow: none;
+            }
+
+            .card {
+                border: none;
+                border-radius: 15px;
+            }
+
+            .card-header {
+                border-radius: 15px 15px 0 0 !important;
+                padding: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.8rem;
+            }
+        </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+        <script>
+            $(document).ready(function() {
+                // Animación suave al mostrar errores
+                if ($('.alert-danger').length > 0) {
+                    $('.alert-danger').hide().slideDown();
+                }
+
+                // Focus automático en el campo de usuario
+                $('#username').focus();
+
+                // Prevenir múltiples envíos del formulario
+                $('form').submit(function() {
+                    $(this).find('button[type="submit"]').prop('disabled', true);
+                    $(this).find('button[type="submit"]').html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Iniciando sesión...'
+                    );
+                });
+            });
+        </script>
+}

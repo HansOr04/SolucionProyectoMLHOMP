@@ -1,0 +1,21 @@
+﻿.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.apartment-card {
+    transition: transform 0.2s;
+}
+
+    .apartment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}

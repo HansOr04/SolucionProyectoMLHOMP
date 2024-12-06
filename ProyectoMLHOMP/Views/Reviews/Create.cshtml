@@ -1,0 +1,152 @@
+﻿@model ProyectoMLHOMP.Models.Review
+
+@{
+    ViewData["Title"] = "Escribir Reseña";
+    var isOwner = (bool)(ViewData["IsOwner"] ?? false);
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Escribir Reseña para @ViewData["ApartmentTitle"]</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" name="ApartmentId" value="@ViewData["ApartmentId"]" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Título de la Reseña</label>
+                            <input asp-for="Title" class="form-control" required />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">Contenido de la Reseña</label>
+                            <textarea asp-for="Content" class="form-control" rows="4" required></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="OverallRating" class="form-label">Calificación General</label>
+                                <select asp-for="OverallRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="OverallRating" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="CleanlinessRating" class="form-label">Limpieza</label>
+                                <select asp-for="CleanlinessRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CleanlinessRating" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="CommunicationRating" class="form-label">Comunicación</label>
+                                <select asp-for="CommunicationRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CommunicationRating" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="CheckInRating" class="form-label">Check-in</label>
+                                <select asp-for="CheckInRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CheckInRating" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="AccuracyRating" class="form-label">Precisión</label>
+                                <select asp-for="AccuracyRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="AccuracyRating" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="LocationRating" class="form-label">Ubicación</label>
+                                <select asp-for="LocationRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="LocationRating" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label asp-for="ValueRating" class="form-label">Relación Calidad-Precio</label>
+                                <select asp-for="ValueRating" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i estrellas</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ValueRating" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Publicar Reseña</button>
+                            <a asp-controller="Apartments"
+                               asp-action="Details"
+                               asp-route-id="@ViewData["ApartmentId"]"
+                               class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Script para mostrar estrellas en los selects
+        $(document).ready(function() {
+            $('select').each(function() {
+                $(this).on('change', function() {
+                    var stars = '★'.repeat($(this).val()) + '☆'.repeat(5 - $(this).val());
+                    $(this).next('.stars').text(stars);
+                });
+            });
+        });
+    </script>
+}

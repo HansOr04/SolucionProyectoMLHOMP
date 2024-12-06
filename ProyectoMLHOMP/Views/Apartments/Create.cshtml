@@ -1,0 +1,312 @@
+﻿@model ProyectoMLHOMP.Models.Apartment
+
+@{
+    ViewData["Title"] = "Crear Departamento";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">Crear Nuevo Departamento</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data" id="createForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Sección de imagen con validaciones mejoradas -->
+                        <div class="mb-4">
+                            <label asp-for="ImageFile" class="form-label required">Imagen del Departamento</label>
+                            <div class="image-upload-container" 
+                                 ondrop="dropHandler(event);" 
+                                 ondragover="dragOverHandler(event);"
+                                 ondragleave="dragLeaveHandler(event);">
+                                <img id="preview" src="/images/apartments/default-apartment.jpg" 
+                                     class="img-fluid rounded mb-2" alt="Vista previa de imagen" 
+                                     style="max-height: 200px; width: auto;" />
+                                <div class="input-group">
+                                    <input asp-for="ImageFile" class="form-control" type="file" 
+                                           accept="image/jpeg,image/png,image/jpg" 
+                                           onchange="validateAndPreviewImage(this);" required />
+                                </div>
+                                <small class="text-muted">
+                                    Arrastre una imagen aquí o haga clic para seleccionar
+                                    <br>
+                                    Formatos permitidos: JPG, JPEG, PNG (máx. 5MB)
+                                </small>
+                                <span asp-validation-for="ImageFile" class="text-danger d-block mt-2"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Title" class="form-label required">Título</label>
+                                <input asp-for="Title" class="form-control" 
+                                       placeholder="Ingrese el título del departamento" 
+                                       maxlength="100" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label required">Descripción</label>
+                            <textarea asp-for="Description" class="form-control" 
+                                    rows="3" placeholder="Describa el departamento"
+                                    maxlength="2000"></textarea>
+                            <div class="text-muted">
+                                <small class="characters-count">2000 caracteres restantes</small>
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PricePerNight" class="form-label required">Precio por Noche</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="PricePerNight" class="form-control" 
+                                           type="number" step="0.01" min="0.01" max="99999.99" 
+                                           onkeypress="return validateDecimalKeyPress(event, this)"/>
+                                </div>
+                                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Address" class="form-label required">Dirección</label>
+                                <input asp-for="Address" class="form-control" 
+                                       placeholder="Ingrese la dirección completa" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="City" class="form-label required">Ciudad</label>
+                                <input asp-for="City" class="form-control" 
+                                       placeholder="Ingrese la ciudad" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Country" class="form-label required">País</label>
+                                <input asp-for="Country" class="form-control" 
+                                       placeholder="Ingrese el país" />
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Bedrooms" class="form-label required">Habitaciones</label>
+                                <input asp-for="Bedrooms" class="form-control" 
+                                       type="number" min="1" max="20" />
+                                <span asp-validation-for="Bedrooms" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Bathrooms" class="form-label required">Baños</label>
+                                <input asp-for="Bathrooms" class="form-control" 
+                                       type="number" min="1" max="20" />
+                                <span asp-validation-for="Bathrooms" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="MaxOccupancy" class="form-label required">Ocupación Máxima</label>
+                                <input asp-for="MaxOccupancy" class="form-control" 
+                                       type="number" min="1" max="50" />
+                                <span asp-validation-for="MaxOccupancy" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsAvailable" class="form-check-input" type="checkbox" checked />
+                                <label asp-for="IsAvailable" class="form-check-label">Disponible para reservas</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="bi bi-save"></i> Crear Departamento
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver al Listado
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .image-upload-container {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-container:hover,
+        .image-upload-container.drag-over {
+            border-color: #0d6efd;
+            background-color: #f1f8ff;
+        }
+
+        #preview {
+            display: block;
+            margin: 0 auto 15px;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-primary:disabled {
+            cursor: not-allowed;
+        }
+
+        .characters-count {
+            float: right;
+            margin-top: 5px;
+        }
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Función para validar y previsualizar la imagen
+        function validateAndPreviewImage(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+                if (file.size > maxSize) {
+                    showError('La imagen no puede superar los 5MB');
+                    input.value = '';
+                    return;
+                }
+
+                if (!allowedTypes.includes(file.type)) {
+                    showError('Solo se permiten archivos JPG, JPEG y PNG');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Funciones para drag and drop
+        function dragOverHandler(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function dragLeaveHandler(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+        }
+
+        function dropHandler(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+
+            if (ev.dataTransfer.items) {
+                const file = ev.dataTransfer.items[0].getAsFile();
+                if (file) {
+                    const input = document.getElementById('ImageFile');
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+                    validateAndPreviewImage(input);
+                }
+            }
+        }
+
+        // Función para validar decimales en precio
+        function validateDecimalKeyPress(event, element) {
+            if (event.key === '.' && element.value.includes('.')) {
+                event.preventDefault();
+                return false;
+            }
+            if (event.key === '-' || event.key === '+' || event.key === 'e') {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        // Mostrar error
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger alert-dismissible fade show mt-2';
+            errorDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector('.image-upload-container').appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        // Inicialización y validación del formulario
+        $(document).ready(function () {
+            // Contador de caracteres para la descripción
+            $('#Description').on('input', function() {
+                const maxLength = 2000;
+                const currentLength = $(this).val().length;
+                const remaining = maxLength - currentLength;
+                $('.characters-count').text(`${remaining} caracteres restantes`);
+            });
+
+            // Validación del formulario
+            $('#createForm').submit(function (e) {
+                if ($(this).valid()) {
+                    const submitButton = $('#submitButton');
+                    submitButton.prop('disabled', true);
+                    submitButton.html('<span class="spinner-border spinner-border-sm"></span> Creando...');
+                }
+            });
+
+            // Validación adicional para la imagen
+            $.validator.addMethod('validImage', function(value, element) {
+                if (element.files.length === 0) return true;
+                const file = element.files[0];
+                const maxSize = 5 * 1024 * 1024;
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                return file.size <= maxSize && allowedTypes.includes(file.type);
+            }, 'Por favor, seleccione una imagen válida (JPG, JPEG, PNG, máx. 5MB)');
+
+            // Aplicar validación personalizada
+            $('#ImageFile').rules('add', {
+                validImage: true
+            });
+        });
+    </script>
+}
+}
