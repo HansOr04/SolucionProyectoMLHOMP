@@ -1,0 +1,188 @@
+﻿@model ProyectoMLHOMP.Models.User
+
+@{
+    ViewData["Title"] = "Editar Perfil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Editar Perfil</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="text-center mb-4">
+                            <img src="@Model.ProfileImageUrl" alt="Foto de perfil actual"
+                                 class="rounded-circle img-thumbnail"
+                                 style="width: 150px; height: 150px; object-fit: cover;" />
+                            <div class="mt-2">
+                                <label for="profileImage" class="form-label">Cambiar foto de perfil</label>
+                                <input type="file" name="profileImage" id="profileImage"
+                                       class="form-control" accept="image/*" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">Nombre</label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">Apellido</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" readonly />
+                            <small class="text-muted">El email no se puede modificar</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Username" class="form-label">Nombre de Usuario</label>
+                            <input asp-for="Username" class="form-control" readonly />
+                            <small class="text-muted">El nombre de usuario no se puede modificar</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">Teléfono</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Dirección</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="City" class="form-label">Ciudad</label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Country" class="form-label">País</label>
+                                <input asp-for="Country" class="form-control" />
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Biography" class="form-label">Biografía</label>
+                            <textarea asp-for="Biography" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Biography" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Languages" class="form-label">Idiomas</label>
+                            <input asp-for="Languages" class="form-control" />
+                            <span asp-validation-for="Languages" class="text-danger"></span>
+                            <small class="text-muted">Separa los idiomas con comas (ej: Español, Inglés, Francés)</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsHost" class="form-check-input" type="checkbox" id="isHostSwitch" />
+                                <label class="form-check-label" for="isHostSwitch">
+                                    Modo Anfitrión
+                                </label>
+                            </div>
+                            <div id="hostInfo" class="mt-2 alert alert-info" style="display: none;">
+                                <i class="bi bi-info-circle"></i>
+                                Al activar el modo anfitrión, podrás publicar y gestionar propiedades en la plataforma.
+                                Asegúrate de cumplir con todos los requisitos legales y normativas locales.
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Profile" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver al Perfil
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1rem;
+        }
+
+        .form-check-input:checked {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        .img-thumbnail {
+            border: 3px solid #dee2e6;
+            padding: 3px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            // Mostrar/ocultar información de host
+            function toggleHostInfo() {
+                if ($('#isHostSwitch').is(':checked')) {
+                    $('#hostInfo').slideDown();
+                } else {
+                    $('#hostInfo').slideUp();
+                }
+            }
+
+            // Inicializar estado
+            toggleHostInfo();
+
+            // Manejar cambios
+            $('#isHostSwitch').change(toggleHostInfo);
+
+            // Vista previa de imagen
+            $("#profileImage").change(function() {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('img.rounded-circle').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Confirmar cambio de modo host
+            $('#isHostSwitch').change(function() {
+                if ($(this).is(':checked')) {
+                    if (!confirm('¿Estás seguro de que deseas activar el modo anfitrión? ' +
+                               'Esto te permitirá publicar propiedades en la plataforma.')) {
+                        $(this).prop('checked', false);
+                        toggleHostInfo();
+                    }
+                }
+            });
+        });
+    </script>
+}

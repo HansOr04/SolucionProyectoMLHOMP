@@ -1,0 +1,145 @@
+﻿@model ProyectoMLHOMP.Models.User
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">Perfil de Usuario</h2>
+                    <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserId" class="btn btn-light">
+                        <i class="bi bi-pencil-fill"></i> Editar Perfil
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <img src="@Model.ProfileImageUrl" alt="Foto de perfil" class="rounded-circle img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;" />
+                            @if (Model.IsVerified)
+                            {
+                                <div class="mt-2">
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle-fill"></i> Verificado
+                                    </span>
+                                </div>
+                            }
+                            @if (Model.IsHost)
+                            {
+                                <div class="mt-2">
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-house-fill"></i> Anfitrión
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <h3>@Model.GetFullName()</h3>
+                                    <p class="text-muted">@@@Model.Username</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <h5><i class="bi bi-info-circle"></i> Información Personal</h5>
+                                    <p>
+                                        <i class="bi bi-envelope"></i> @Model.Email<br />
+                                        <i class="bi bi-telephone"></i> @Model.PhoneNumber<br />
+                                        <i class="bi bi-calendar"></i> Miembro desde @Model.RegistrationDate.ToString("MMMM yyyy")
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <h5><i class="bi bi-geo-alt"></i> Ubicación</h5>
+                                    <p>
+                                        @Model.Address<br />
+                                        @Model.City, @Model.Country
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <h5><i class="bi bi-chat-quote"></i> Biografía</h5>
+                                    <p>@Model.Biography</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h5><i class="bi bi-translate"></i> Idiomas</h5>
+                                    <p>@Model.Languages</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.IsHost)
+                    {
+                        <div class="row mt-4">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="bi bi-houses"></i> Mis Propiedades</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (Model.ApartmentsOwned != null && Model.ApartmentsOwned.Any())
+                                        {
+                                            <div class="list-group">
+                                                @foreach (var apartment in Model.ApartmentsOwned)
+                                                {
+                                                    <a href="@Url.Action("Details", "Apartments", new { id = apartment.ApartmentId })"
+                                                       class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">@apartment.Title</h6>
+                                                            <small>@apartment.PricePerNight.ToString("C") / noche</small>
+                                                        </div>
+                                                        <small>@apartment.City, @apartment.Country</small>
+                                                    </a>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted mb-0">No tienes propiedades listadas aún.</p>
+                                            <a asp-controller="Apartments" asp-action="Create" class="btn btn-primary mt-2">
+                                                <i class="bi bi-plus-circle"></i> Añadir Propiedad
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1rem;
+        }
+
+        .img-thumbnail {
+            border: 3px solid #dee2e6;
+            padding: 3px;
+        }
+
+        .badge {
+            font-size: 0.9em;
+            padding: 0.5em 1em;
+        }
+    </style>
+}
