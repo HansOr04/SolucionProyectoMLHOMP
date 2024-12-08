@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="APPProyectoMLHOMP.Views.VistaUno"
+             BackgroundColor="White">
+
+    <ScrollView>
+    <Grid RowDefinitions="Auto,*">
+        <Frame Grid.Row="0" 
+       Padding="0" 
+       IsClippedToBounds="True"
+       BackgroundColor="Transparent"
+       BorderColor="Transparent"
+       HasShadow="False">
+            <Frame.Clip>
+                <RoundRectangleGeometry 
+            Rect="0,0,1000,1000"
+            CornerRadius="0,0,30,30"/>
+            </Frame.Clip>
+            <Image Source="images1.jpg"
+           Aspect="AspectFill"
+           HorizontalOptions="Fill"
+           VerticalOptions="Fill"
+           HeightRequest="{OnPlatform iOS=400, Android=400, WinUI=500}"
+            
+           SemanticProperties.Description="Imagen de edificio moderno"/>
+        </Frame>
+
+        <!-- Contenido restante -->
+        <VerticalStackLayout Grid.Row="1" 
+                            Spacing="25" 
+                            Padding="30,40,30,0"
+                            VerticalOptions="Start">
+            <Label 
+                Text="Te ayudamos en tu búsqueda"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                TextColor="#000"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Encuentra tu espacio ideal en Quito en tan solo 5 minutos"
+                SemanticProperties.HeadingLevel="Level2"
+                FontSize="18"
+                TextColor="Gray"
+                HorizontalOptions="Center" />
+
+                <Button 
+                x:Name="StartButton"
+                Text="Empezar"
+                SemanticProperties.Hint="Comienza tu búsqueda de espacio"
+                BackgroundColor="#778759"
+                TextColor="White"
+                CornerRadius="25"
+                HeightRequest="50"
+                WidthRequest="200"
+                Clicked="StartButton_Clicked"
+                HorizontalOptions="Center" />
+            </VerticalStackLayout>
+    </Grid>
+    </ScrollView>
+
+</ContentPage>
