@@ -130,6 +130,32 @@
                            TextColor="Gray"/>
                 </StackLayout>
             </Frame>
+            <Grid ColumnDefinitions="*,*" 
+      ColumnSpacing="15"
+      Margin="0,0,0,20">
+
+                <!-- Botón de Booking -->
+                <Button Grid.Column="0"
+            Text="Crear Reserva"
+            BackgroundColor="#007AFF"
+            TextColor="White"
+            FontAttributes="Bold"
+            CornerRadius="10"
+            HeightRequest="50"
+            x:Name="CreateBookingButton"
+            Clicked="OnCreateBookingClicked"/>
+
+                <!-- Botón de Review -->
+                <Button Grid.Column="1"
+            Text="Escribir Reseña"
+            BackgroundColor="#34C759"
+            TextColor="White"
+            FontAttributes="Bold"
+            CornerRadius="10"
+            HeightRequest="50"
+            x:Name="CreateReviewButton"
+            Clicked="OnCreateReviewClicked"/>
+            </Grid>
         </StackLayout>
     </ScrollView>
 </ContentPage>

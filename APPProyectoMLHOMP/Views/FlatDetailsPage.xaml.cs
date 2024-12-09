@@ -47,5 +47,14 @@ namespace APPProyectoMLHOMP.Views
                 UpdatedAtLabel.IsVisible = false;
             }
         }
+        private async void OnCreateBookingClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CreateBooking(_apartment.ApartmentId, _apartment.PricePerNight));
+        }
+
+        private async void OnCreateReviewClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CreateReview(_apartment.ApartmentId));
+        }
     }
 }
