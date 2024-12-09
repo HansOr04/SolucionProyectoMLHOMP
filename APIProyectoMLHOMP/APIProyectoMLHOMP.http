@@ -1,6 +1,0 @@
-@APIProyectoMLHOMP_HostAddress = http://localhost:5012
-
-GET {{APIProyectoMLHOMP_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
